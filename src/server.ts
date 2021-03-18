@@ -4,13 +4,14 @@ import './database';
 import { router } from './routes';
 
 const app = express();
-const cors = require('cors')
+const cors = require('cors');
+var port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(router);
 app.use(cors());
 
-app.listen(12334, () => {
+app.listen(port, () => {
     console.log("Server is running!")
 });
 
