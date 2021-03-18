@@ -9,7 +9,10 @@ var port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(router);
-app.use(cors());
+app.use((req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    app.use(cors());
+});
 
 app.listen(port, () => {
     console.log("Server is running!")
