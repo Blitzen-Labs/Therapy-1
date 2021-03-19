@@ -10,6 +10,11 @@ router.post('/update', userController.update); //Atualizar
 
 router.get('/search', userController.search); // Pesquisar (logar)
 router.get('/show', userController.show); //exibir todos
+router.get('/', (req, res) => {
+    return res.json({
+        "message": "Server started!"
+    })
+});
 
 
 export { router };
