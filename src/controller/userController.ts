@@ -7,6 +7,7 @@ class UserController {
 
 
 
+
     async create(req: Request, res: Response) {
         const { name, cpf, email, password, birthDate } = req.body;
 
@@ -30,6 +31,7 @@ class UserController {
         await usersRepository.save(user);
 
 
+        res.setHeader("Access-Controll-Allow-Origin", "*");
         return res.json(user);
     }
 
@@ -50,6 +52,7 @@ class UserController {
         usersRepository.delete({ id });
 
 
+        res.setHeader("Access-Controll-Allow-Origin", "*");
         return res.json({
             "message": "sucess"
         });
@@ -64,6 +67,7 @@ class UserController {
             email, password
         });
 
+        res.setHeader("Access-Controll-Allow-Origin", "*");
         if (!user) {
             return res.status(400).json("User not found");
         } else {
@@ -101,6 +105,7 @@ class UserController {
         })
 
 
+        res.setHeader("Access-Controll-Allow-Origin", "*");
         return res.json(user);
     }
 
@@ -109,7 +114,7 @@ class UserController {
         const usersRepository = getCustomRepository(UsersRepository);
 
         const all = await usersRepository.find();
-
+        response.setHeader("Access-Controll-Allow-Origin", "*");
         return response.json(all);
     }
 
