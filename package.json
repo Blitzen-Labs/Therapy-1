@@ -5,9 +5,9 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
+    "start": "node --experimental-modules --loader ./custom-loader.mjs src/server.ts",
     "typeorm": "ts-node-dev node_modules/typeorm/cli.js",
-    "dev": "node --experimental-modules --loader ./custom-loader.mjs src/server.ts"
+    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts"
   },
   "dependencies": {
     "@types/express": "^4.17.11",
