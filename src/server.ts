@@ -1,4 +1,5 @@
-import express, { request, response } from 'express';
+import express from 'express';
+import { request, response } from 'express';
 import 'reflect-metadata';
 import './database';
 import { router } from './routes';
@@ -11,7 +12,7 @@ app.use(express.json());
 app.use(router);
 app.use(cors());
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(8080, () => {
     console.log("Server is running!")
 });
 
