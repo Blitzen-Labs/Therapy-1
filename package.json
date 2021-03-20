@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "node --experimental-modules --loader ./custom-loader.mjs src/server.ts",
+    "start": "ts-node-dev src/server.ts",
     "typeorm": "ts-node-dev node_modules/typeorm/cli.js",
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts"
   },
