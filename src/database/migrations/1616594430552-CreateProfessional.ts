@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 import { Table } from "typeorm/schema-builder/table/Table";
 
-export class CreateUsers1615293050415 implements MigrationInterface {
+export class CreateProfessional1616594430552 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "user",
+                name: "professional",
                 columns: [
                     {
                         name: 'id',
@@ -15,6 +15,10 @@ export class CreateUsers1615293050415 implements MigrationInterface {
                     },
                     {
                         name: 'name',
+                        type: 'varChar'
+                    },
+                    {
+                        name: 'idCod',
                         type: 'varChar'
                     },
                     {
@@ -37,14 +41,6 @@ export class CreateUsers1615293050415 implements MigrationInterface {
                         name: 'createdAt',
                         type: 'timestamp',
                         default: 'now()',
-                    },
-                    {
-                        name: 'city',
-                        type: 'varchar'
-                    },
-                    {
-                        name: 'state',
-                        type: 'varchar'
                     }
                 ]
             })
@@ -52,7 +48,7 @@ export class CreateUsers1615293050415 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('user');
+        await queryRunner.dropTable("professional");
     }
 
 }

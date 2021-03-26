@@ -1,19 +1,16 @@
 import { Request, response, Response } from 'express';
 import { createQueryBuilder, getCustomRepository, getRepository } from 'typeorm';
-import { User } from '../models/User';
-import { UsersRepository } from '../repositories/UsersRepository';
+import { Professional } from '../models/Professional';
+import { ProRepository } from '../repositories/ProRepository';
 
-class UserController {
-
-
-
+class ProController {
 
     async create(req: Request, res: Response) {
-        const { name, cpf, email, password, birthDate, city, state } = req.body;
+        const { name, idCod, cpf, email, password, birthDate } = req.body;
 
-        const usersRepository = getCustomRepository(UsersRepository);
+        const proRepository = getCustomRepository(ProRepository);
 
-        const userAlreadyExist = await usersRepository.findOne({
+        const userAlreadyExist = await proRepository.findOne({
             email
         })
 
@@ -24,22 +21,21 @@ class UserController {
             })
         }
 
-        const user = usersRepository.create({
-            name, cpf, email, password, birthDate, city, state
+        const user = proRepository.create({
+            name, idCod, cpf, email, password, birthDate
         });
 
-        await usersRepository.save(user);
+        await proRepository.save(user);
 
 
-        res.setHeader("Access-Control-Allow-Origin", "*");
         return res.json(user);
     }
 
     async delete(req: Request, res: Response, params) {
 
         const { id } = req.params;
-        const usersRepository = getCustomRepository(UsersRepository);
-        const userExist = await usersRepository.findOne({
+        const proRepository = getCustomRepository(ProRepository);
+        const userExist = await proRepository.findOne({
             id
         });
 
@@ -49,10 +45,9 @@ class UserController {
             });
         }
 
-        usersRepository.delete({ id });
+        proRepository.delete({ id });
 
 
-        res.setHeader("Access-Control-Allow-Origin", "*");
         return res.json({
             "message": "sucess"
         });
@@ -61,15 +56,14 @@ class UserController {
     async search(req: Request, res: Response) {
         const { email, password } = req.body;
 
-        const usersRepository = getCustomRepository(UsersRepository);
+        const proRepository = getCustomRepository(ProRepository);
 
-        const user = await usersRepository.findOne({
+        const user = await proRepository.findOne({
             email, password
         });
 
-        res.setHeader("Access-Control-Allow-Origin", "*");
         if (!user) {
-            return res.status(200).json("User not found");
+            return res.status(400).json("User not found");
         } else {
             return res.json(user);
         }
@@ -77,12 +71,12 @@ class UserController {
 
     async update(req: Request, res: Response) {
         //recebe todos os dados do  usuario a ser editado
-        const { id, name, cpf, email, password, birthDate, city, state } = req.body;
+        const { id, name, idCod, cpf, email, password, birthDate } = req.body;
 
-        const usersRepository = getCustomRepository(UsersRepository);
+        const proRepository = getCustomRepository(ProRepository);
 
         //porem usa apenas o id para localiza-lo no bd
-        let user = await usersRepository.findOne({
+        let user = await proRepository.findOne({
             id
         });
 
@@ -97,29 +91,27 @@ class UserController {
         user.email == email ? user.email = user.email : user.email = email;
         user.password == password ? user.password = user.password : user.password = password;
         user.birthDate == birthDate ? user.birthDate = user.birthDate : user.birthDate = birthDate;
-        user.city == city ? user.city = user.city : user.city = city;
-        user.state == state ? user.state = user.state : user.state = state;
+        user.idCod == idCod ? user.idCod = user.idCod : user.idCod = idCod;
 
 
-        await usersRepository.update(id, {
-            name: user.name, cpf: user.cpf, email: user.email,
+        await proRepository.update(id, {
+            name: user.name, idCod: user.idCod, cpf: user.cpf, email: user.email,
             password: user.password, birthDate: user.birthDate
         })
 
 
-        res.setHeader("Access-Control-Allow-Origin", "*");
         return res.json(user);
     }
 
 
     async show(request: Request, response: Response) {
-        const usersRepository = getCustomRepository(UsersRepository);
+        const proRepository = getCustomRepository(ProRepository);
 
-        const all = await usersRepository.find();
+        const all = await proRepository.find();
         response.setHeader("Access-Control-Allow-Origin", "*");
         return response.json(all);
     }
 
 }
 
-export { UserController }
+export { ProController }

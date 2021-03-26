@@ -1,14 +1,17 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
 import { v4 as uuid } from 'uuid';
 
-@Entity("user")
-class User {
+@Entity("professional")
+class Professional {
 
     @PrimaryColumn()
     readonly id: string;
 
     @Column()
     name: string
+
+    @Column()
+    idCod: string
 
     @Column()
     cpf: string;
@@ -18,12 +21,6 @@ class User {
 
     @Column()
     password: string;
-
-    @Column()
-    city: string;
-
-    @Column()
-    state: string;
 
     @CreateDateColumn()
     birthDate: Date;
@@ -39,4 +36,4 @@ class User {
 
 }
 
-export { User };
+export { Professional };
