@@ -4,8 +4,8 @@ import { Table } from "typeorm/schema-builder/table/Table";
 export class CreateUsers1615293050415 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.createTable(
-            new Table({
+        await queryRunner.createTable( //Criação da tabela de usuário 
+            new Table({                //com seus respectivos tributos
                 name: "user",
                 columns: [
                     {

@@ -5,6 +5,7 @@ import { ProRepository } from '../repositories/ProRepository';
 
 class ProController {
 
+    //Criar
     async create(req: Request, res: Response) {
         const { name, idCod, cpf, email, password, birthDate } = req.body;
 
@@ -31,6 +32,7 @@ class ProController {
         return res.json(user);
     }
 
+    //Deletar
     async delete(req: Request, res: Response, params) {
 
         const { id } = req.params;
@@ -53,6 +55,7 @@ class ProController {
         });
     }
 
+    //Procurar
     async search(req: Request, res: Response) {
         const { email, password } = req.body;
 
@@ -69,41 +72,36 @@ class ProController {
         }
     }
 
+    //Atualizar
     async update(req: Request, res: Response) {
-        //recebe todos os dados do  usuario a ser editado
-        const { id, name, idCod, cpf, email, password, birthDate } = req.body;
+        //recebe o id do profissional a ser editado
+        const { id } = req.body;
 
         const proRepository = getCustomRepository(ProRepository);
 
-        //porem usa apenas o id para localiza-lo no bd
+        //usa o id para localiza-lo no bd
         let user = await proRepository.findOne({
             id
         });
+
+        const { name = user.name, idCod = user.idCod, cpf = user.cpf, email = user.email, password = user.password, birthDate = user.birthDate} = req.body;
 
         if (!user) {
             return res.status(400).json("User not found");
         }
 
-
-
-        user.name == name ? user.name = user.name : user.name = name;
-        user.cpf == cpf ? user.cpf = user.cpf : user.cpf = cpf;
-        user.email == email ? user.email = user.email : user.email = email;
-        user.password == password ? user.password = user.password : user.password = password;
-        user.birthDate == birthDate ? user.birthDate = user.birthDate : user.birthDate = birthDate;
-        user.idCod == idCod ? user.idCod = user.idCod : user.idCod = idCod;
-
-
-        await proRepository.update(id, {
-            name: user.name, idCod: user.idCod, cpf: user.cpf, email: user.email,
-            password: user.password, birthDate: user.birthDate
-        })
-
-
-        return res.json(user);
+        const updatedPro = {
+        name: name, idCod: idCod, cpf: cpf, email: email,
+        password: password, birthDate: birthDate
     }
 
+        await proRepository.update(id, updatedPro)
 
+
+        return res.json(updatedPro);
+    }
+
+    //Exibir todos
     async show(request: Request, response: Response) {
         const proRepository = getCustomRepository(ProRepository);
 

@@ -7,7 +7,7 @@ class UserController {
 
 
 
-
+    //Criar
     async create(req: Request, res: Response) {
         const { name, cpf, email, password, birthDate, city, state } = req.body;
 
@@ -35,6 +35,7 @@ class UserController {
         return res.json(user);
     }
 
+    //Apagar
     async delete(req: Request, res: Response, params) {
 
         const { id } = req.params;
@@ -58,6 +59,7 @@ class UserController {
         });
     }
 
+    //Procurar
     async search(req: Request, res: Response) {
         const { email, password } = req.body;
 
@@ -75,9 +77,11 @@ class UserController {
         }
     }
 
+    //Atualizar
     async update(req: Request, res: Response) {
         //recebe todos os dados do  usuario a ser editado
-        const { id, name, cpf, email, password, birthDate, city, state } = req.body;
+        
+        const { id } = req.body;
 
         const usersRepository = getCustomRepository(UsersRepository);
 
@@ -86,32 +90,27 @@ class UserController {
             id
         });
 
+        const { name = user.name, cpf = user.cpf, email = user.email, password = user.password, birthDate = user.birthDate, city = user.city, state = user.state } = req.body;
+
         if (!user) {
             return res.status(400).json("User not found");
         }
 
+        const updatedUser = {
+            name: name, cpf: cpf, email: email,
+            password: password, birthDate: birthDate
+        }
 
 
-        user.name == name ? user.name = user.name : user.name = name;
-        user.cpf == cpf ? user.cpf = user.cpf : user.cpf = cpf;
-        user.email == email ? user.email = user.email : user.email = email;
-        user.password == password ? user.password = user.password : user.password = password;
-        user.birthDate == birthDate ? user.birthDate = user.birthDate : user.birthDate = birthDate;
-        user.city == city ? user.city = user.city : user.city = city;
-        user.state == state ? user.state = user.state : user.state = state;
-
-
-        await usersRepository.update(id, {
-            name: user.name, cpf: user.cpf, email: user.email,
-            password: user.password, birthDate: user.birthDate
-        })
+        await usersRepository.update(id, updatedUser)
 
 
         res.setHeader("Access-Control-Allow-Origin", "*");
-        return res.json(user);
+        return res.json(updatedUser);
     }
 
 
+    //Exibir todos
     async show(request: Request, response: Response) {
         const usersRepository = getCustomRepository(UsersRepository);
 

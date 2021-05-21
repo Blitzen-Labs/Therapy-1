@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { UserController } from './controller/userController';
 import { ProController } from './controller/ProController';
 
+//Criação das rotas e dos controladores do usuário e profissional
 const router = Router();
 const userController = new UserController();
 const proController = new ProController();
@@ -16,7 +17,12 @@ router.get('/show', userController.show); //exibir todos
 
 
 //Professional
-router.post('/pro', proController.create);
+router.post('/pro', proController.create); //Criar
+router.delete('/pro/:id', proController.delete); //Deletar
+router.post('/updatepro', proController.update); //Atualizar
+
+router.get('/pro', proController.search); // Pesquisar (logar)
+router.get('/showPro', proController.show); //exibir todos
 
 
 
@@ -24,11 +30,8 @@ router.post('/pro', proController.create);
 
 
 
-router.get('/', (req, res) => {
-    return res.json({
-        "message": "Server started!"
-    })
-});
+
+
 
 
 export { router };

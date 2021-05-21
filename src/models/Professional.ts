@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 @Entity("professional")
 class Professional {
+    //Modelo do profissional com seus respectivos atributos
 
     @PrimaryColumn()
     readonly id: string;
