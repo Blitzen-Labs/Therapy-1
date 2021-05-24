@@ -84,16 +84,16 @@ class ProController {
             id
         });
 
-        const { name = user.name, idCod = user.idCod, cpf = user.cpf, email = user.email, password = user.password, birthDate = user.birthDate} = req.body;
+        const { name = user.name, idCod = user.idCod, cpf = user.cpf, email = user.email, password = user.password, birthDate = user.birthDate } = req.body;
 
         if (!user) {
             return res.status(400).json("User not found");
         }
 
         const updatedPro = {
-        name: name, idCod: idCod, cpf: cpf, email: email,
-        password: password, birthDate: birthDate
-    }
+            name: name, idCod: idCod, cpf: cpf, email: email,
+            password: password, birthDate: birthDate
+        }
 
         await proRepository.update(id, updatedPro)
 
@@ -108,6 +108,15 @@ class ProController {
         const all = await proRepository.find();
         response.setHeader("Access-Control-Allow-Origin", "*");
         return response.json(all);
+    }
+
+    async readFromId(id: any) {
+        const proRepository = getCustomRepository(ProRepository);
+
+        const pro = await proRepository.findOne({ id });
+
+        return pro;
+
     }
 
 }

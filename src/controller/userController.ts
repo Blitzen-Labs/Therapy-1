@@ -80,7 +80,7 @@ class UserController {
     //Atualizar
     async update(req: Request, res: Response) {
         //recebe todos os dados do  usuario a ser editado
-        
+
         const { id } = req.body;
 
         const usersRepository = getCustomRepository(UsersRepository);
@@ -107,6 +107,15 @@ class UserController {
 
         res.setHeader("Access-Control-Allow-Origin", "*");
         return res.json(updatedUser);
+    }
+
+    async readFromId(id: any) {
+
+        const usersRepository = getCustomRepository(UsersRepository);
+
+        const user = await usersRepository.findOne({ id });
+
+        return user;
     }
 
 

@@ -3,12 +3,15 @@ import 'reflect-metadata';
 import './database';
 import { router } from './routes';
 import { ChatRoom } from './models/chatRoom';
+import { MessageController } from './controller/MessageController';
+
 
 //Criação de um app express
 const app = express();
 const cors = require('cors');//Configuração de níveis de acesso "cors"
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const messageController = new MessageController();
 
 
 
@@ -18,35 +21,38 @@ app.use(cors());
 app.use(express.json());
 app.use(router);
 
-app.get('/',(req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
 io.on("connection", function (socket) {
     var chatFull = [];
 
-    socket.on("joinRoom", ({nickname1, chatRoom})=>{
+
+
+    socket.on("joinRoom", ({ nickname1, chatRoom }) => {
         socket.join(chatRoom);
-        console.log(nickname1 + " conectado na sala " + chatRoom);
     })
 
-    socket.on("msg", function({msg, chatRoom}){
-        socket.broadcast.to(chatRoom).emit("msg", msg);
+    socket.on("msg", ({ nickname1, msg, chatRoom }) => {
+        socket.broadcast.to(chatRoom).emit("msg", { nickname1, msg, chatRoom });
+        messageController.createLog(nickname1, msg, chatRoom)
     })
 
-
+    socket.on("connected", ({ msg, chatRoom }) => {
+        socket.broadcast.to(chatRoom).emit("connected", { msg, chatRoom });
+    })
 
     //Retorna o array do chat completo ao client
-    socket.on("saveChat", (options)=>{
+    socket.on("saveChat", (options) => {
         chatFull.push(options);
-        console.log(chatFull);
-        
+
     });
 
-    // socket.on("disconnect", ()=>{
-    //     io.emit("msg", "Um usuário saiu </br>")
-    // })
-  });
+    socket.on("disconnect", () => {
+
+    })
+});
 
 
 

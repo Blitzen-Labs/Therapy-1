@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class CreateChatRoom1621186140510 implements MigrationInterface {
+export class CreateMessages1621808065896 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "chatRooms",
+                name: "messages",
                 columns: [
                     {
                         name: "id",
@@ -13,11 +13,15 @@ export class CreateChatRoom1621186140510 implements MigrationInterface {
                         isPrimary: true
                     },
                     {
-                        name: "userId",
+                        name: "nickname",
                         type: "varchar"
                     },
                     {
-                        name: "proId",
+                        name: "message",
+                        type: "varchar"
+                    },
+                    {
+                        name: "chatRoomId",
                         type: "varchar"
                     },
                     {
@@ -30,18 +34,10 @@ export class CreateChatRoom1621186140510 implements MigrationInterface {
                 // criando as chaves esrangeiras
                 foreignKeys: [
                     {
-                        name: "FKUser",
-                        referencedTableName: "user",
+                        name: "FKChatRoom",
+                        referencedTableName: "chatRooms",
                         referencedColumnNames: ["id"],
-                        columnNames: ["userId"],
-                        onDelete: "CASCADE",
-                        onUpdate: "CASCADE",
-                    },
-                    {
-                        name: "FKPro",
-                        referencedTableName: "professional",
-                        referencedColumnNames: ["id"],
-                        columnNames: ["proId"],
+                        columnNames: ["chatRoomId"],
                         onDelete: "CASCADE",
                         onUpdate: "CASCADE",
                     },
@@ -51,7 +47,7 @@ export class CreateChatRoom1621186140510 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("chatRooms");
+        await queryRunner.dropTable("messages")
     }
 
 }

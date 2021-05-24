@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
- <meta charset="UTF-8">
- <title>Simple chat</title>
- <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Simple chat</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 
 
-<input class="textarea" type="text" placeholder="Type here!" id="textarea"/>
-<div id="msgs"></div>
+  <input class="textarea" type="text" placeholder="Type here!" id="textarea" />
+  <div id="msgs"></div>
 
 
 
 
 
- <script src="/socket.io/socket.io.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
- <script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous"></script>
+  <script>
 
 
     const socket = io();
@@ -29,61 +33,66 @@
     var chatFull = [];
 
 
-   socket.on('connect', function(){
-
-    
-     $("#msgs").append("conectado com id " + socket.id + " na sala " + chatRoom + "<br>")
-
-    const msg = nickname1 + " conectado no chat" + "<br>";
-
-     socket.emit("msg", {msg, chatRoom} )
-     socket.emit("nick", nickname1);
+    socket.on('connect', function () {
 
 
-    socket.emit("joinRoom", {nickname1, chatRoom});
+      $("#msgs").append("conectado com id " + socket.id + " na sala " + chatRoom + "<br>")
 
-   })
+      const msg = nickname1 + " conectado no chat" + "<br>";
 
-   socket.on("msg", function(msg, chatRoom){
-      $("#msgs").append(msg);
+      socket.emit("connected", { msg, chatRoom })
+      socket.emit("nick", nickname1);
+
+
+      socket.emit("joinRoom", { nickname1, chatRoom });
+
+    })
+
+    socket.on("msg", ({ nickname1, msg, chatRoom }) => {
+      $("#msgs").append(nickname1 + " diz: " + msg + "</br>");
       chatFull.push(msg);
-      console.log(chatFull);
-   })
+    })
+
+    socket.on("connected", ({ msg, chatRoom }) => {
+      $("#msgs").append(msg + "</br>");
+      chatFull.push(msg);
+    })
 
 
-   //mensagem
-    $(function(){
-      $("#textarea").keydown(function(key){
-        if(nickname1 == ""){
+    //mensagem
+    $(function () {
+      $("#textarea").keydown(function (key) {
+        if (nickname1 == "") {
           let nickname1 = prompt("Digite um nickname");
-        }else
-        if(key.keyCode == 13){
-          const textArea = $(".textarea");
+        } else
+          if (key.keyCode == 13) {
+            const textArea = $(".textarea");
 
-          const msg = nickname1 + " diz: " + textArea.val()+ "<br>";
+            const msg = textArea.val();
 
-          const chatMsg = textArea.val();
+            const chatMsg = textArea.val();
 
-          const options = {
-            nickname1,
-            chatMsg
+            const options = {
+              nickname1,
+              chatMsg
+            }
+
+            console.log(options);
+
+            socket.emit("msg", ({ nickname1, msg, chatRoom }));
+            socket.emit("saveChat", (options));
+            $("#msgs").append(nickname1 + " diz: " + textArea.val() + "<br>")
+            textArea.val("")
+            chatFull.push(msg)
           }
-
-          console.log(options);
-
-          socket.emit("msg", ({msg, chatRoom}));
-          socket.emit("saveChat", (options));
-          $("#msgs").append(nickname1 + " diz: " + textArea.val() + "<br>")
-          textArea.val("")
-          chatFull.push(msg)
-        }
       })
     })
 
-    socket.on("saveChat", (chat)=>{
+    socket.on("saveChat", (chat) => {
       chatFull.push(chat);
     })
 
- </script>
+  </script>
 </body>
+
 </html>
