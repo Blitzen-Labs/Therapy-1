@@ -77,8 +77,6 @@
               chatMsg
             }
 
-            console.log(options);
-
             socket.emit("msg", ({ nickname1, msg, chatRoom }));
             socket.emit("saveChat", (options));
             $("#msgs").append(nickname1 + " diz: " + textArea.val() + "<br>")
