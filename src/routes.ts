@@ -43,14 +43,20 @@ router.get('/showChat', proController.show); //exibir todos
 
 //Mensagens
 router.post('/msg', messageController.create); //Criar
-router.delete('/chat/:id', chatRoomController.delete); //Deletar
-router.post('/updateChat', proController.update); //Atualizar
-router.get('/chatReadPeople', chatRoomController.readFromPeople); //Ler com base os dois usuários cadastrados no mesmo
-router.get('/chat/:id', chatRoomController.read); // Pesquisar (logar)
-router.get('/showChat', proController.show); //exibir todos
+router.delete('//:id', chatRoomController.delete); //Deletar
+router.post('/', proController.update); //Atualizar
+router.get('/message/:id', messageController.read); // Pesquisar (logar)
+router.get('/', proController.show); //exibir todos
 
 
 
+//Survey
+router.post('/', messageController.create); //Criar
+router.delete('/message/:id', messageController.delete); //Deletar
+router.post('/updateMessage', messageController.update); //Atualizar
+router.get('/', chatRoomController.readFromPeople); //Ler com base os dois usuários cadastrados no mesmo
+router.get('//:id', chatRoomController.read); // Pesquisar (logar)
+router.get('/', proController.show); //exibir todos
 
 
 

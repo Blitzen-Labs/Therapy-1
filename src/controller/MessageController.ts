@@ -68,6 +68,75 @@ class MessageController {
 
     }
 
+    async read(req: Request, res: Response){
+        const {id} = req.params;
+
+        const messageRepository = getCustomRepository(MessageRepository);
+
+        const message = await messageRepository.findOne({id});
+
+        if(!message){
+            return res.status(400).json({
+                Message: "Nada encontrado!"
+            })
+        }
+
+        return res.status(200).json(message);
+    }
+
+    async update(req: Request, res: Response) {
+        //recebe todos os dados do  usuario a ser editado
+
+        const { id } = req.body;
+
+        const messageRepository = getCustomRepository(MessageRepository);
+
+        //porem usa apenas o id para localiza-lo no bd
+        let messageSaved = await messageRepository.findOne({
+            id
+        });
+
+        if (!messageSaved) {
+            return res.status(400).json("Mensagem não encontrada");
+        }
+
+        const { nickname = messageSaved.nickname, message = messageSaved.message, chatRoomId = messageSaved.chatRoomId } = req.body;
+
+        const updatedMessage = {
+            nickname, 
+            message,
+            chatRoomId
+        }
+
+
+        await messageRepository.update(id, updatedMessage)
+
+
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        return res.json(updatedMessage);
+    }
+
+    async delete(req: Request, res: Response){
+        const {id} = req.params;
+
+        const messageRepository = getCustomRepository(MessageRepository);
+
+        const message = await messageRepository.findOne({id});
+
+        if(!message){
+            return res.status(400).json({
+                Message: "Nada encontrado!"
+            })
+        }
+
+        await messageRepository.delete({id});
+
+        return res.status(200).json({
+            Message: "Sucesso!"
+        });
+
+    }
+
 
 }
 

@@ -1,6 +1,5 @@
-import { Request, response, Response } from 'express';
-import { createQueryBuilder, getCustomRepository, getRepository } from 'typeorm';
-import { ChatRoom } from '../models/chatRoom';
+import { Request, Response } from 'express';
+import { getCustomRepository } from 'typeorm';
 import { ChatRoomRepository } from '../repositories/ChatRoomRepository';
 import { ProController } from './ProController';
 import { UserController } from './userController';
@@ -126,4 +125,4 @@ class ChatRoomController {
 
 }
 
-export { ChatRoomController }
+export { ChatRoomController };
