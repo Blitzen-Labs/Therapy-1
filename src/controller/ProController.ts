@@ -9,6 +9,12 @@ class ProController {
     async create(req: Request, res: Response) {
         const { name, idCod, cpf, email, password, birthDate } = req.body;
 
+        if (!name || !idCod || !cpf || !email || !password || !birthDate) {
+            return res.status(400).json({
+                Message: "Campo(s) faltando"
+            })
+        }
+
         const proRepository = getCustomRepository(ProRepository);
 
         const userAlreadyExist = await proRepository.findOne({
@@ -18,7 +24,7 @@ class ProController {
 
         if (userAlreadyExist) {
             return res.status(400).json({
-                error: "email already in use"
+                Message: "email already in use"
             })
         }
 
@@ -29,7 +35,7 @@ class ProController {
         await proRepository.save(user);
 
 
-        return res.json(user);
+        return res.status(201).json(user);
     }
 
     //Deletar
@@ -43,7 +49,7 @@ class ProController {
 
         if (!userExist) {
             return res.json({
-                "message": "User not found"
+                Message: "Usuário não encontrado!"
             });
         }
 
@@ -51,13 +57,23 @@ class ProController {
 
 
         return res.json({
-            "message": "sucess"
+            Message: "sucess"
         });
     }
 
     //Procurar
     async search(req: Request, res: Response) {
         const { email, password } = req.body;
+
+        if (!email) {
+            return res.status(400).json({
+                Message: "Campo email não encontrado!"
+            })
+        } else if (!password) {
+            return res.status(400).json({
+                Message: "Campo senha não encontrado!"
+            })
+        }
 
         const proRepository = getCustomRepository(ProRepository);
 
@@ -77,6 +93,12 @@ class ProController {
         //recebe o id do profissional a ser editado
         const { id } = req.body;
 
+        if (!id) {
+            return res.status(400).json({
+                Message: "Campo id não encontrado!"
+            })
+        }
+
         const proRepository = getCustomRepository(ProRepository);
 
         //usa o id para localiza-lo no bd
@@ -87,7 +109,9 @@ class ProController {
         const { name = user.name, idCod = user.idCod, cpf = user.cpf, email = user.email, password = user.password, birthDate = user.birthDate } = req.body;
 
         if (!user) {
-            return res.status(400).json("User not found");
+            return res.status(400).json({
+                Message: "Usuário não encontrado!"
+            });
         }
 
         const updatedPro = {
@@ -106,7 +130,6 @@ class ProController {
         const proRepository = getCustomRepository(ProRepository);
 
         const all = await proRepository.find();
-        response.setHeader("Access-Control-Allow-Origin", "*");
         return response.json(all);
     }
 

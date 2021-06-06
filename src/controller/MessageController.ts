@@ -68,14 +68,14 @@ class MessageController {
 
     }
 
-    async read(req: Request, res: Response){
-        const {id} = req.params;
+    async read(req: Request, res: Response) {
+        const { id } = req.params;
 
         const messageRepository = getCustomRepository(MessageRepository);
 
-        const message = await messageRepository.findOne({id});
+        const message = await messageRepository.findOne({ id });
 
-        if(!message){
+        if (!message) {
             return res.status(400).json({
                 Message: "Nada encontrado!"
             })
@@ -103,7 +103,7 @@ class MessageController {
         const { nickname = messageSaved.nickname, message = messageSaved.message, chatRoomId = messageSaved.chatRoomId } = req.body;
 
         const updatedMessage = {
-            nickname, 
+            nickname,
             message,
             chatRoomId
         }
@@ -116,25 +116,39 @@ class MessageController {
         return res.json(updatedMessage);
     }
 
-    async delete(req: Request, res: Response){
-        const {id} = req.params;
+    async delete(req: Request, res: Response) {
+        const { id } = req.params;
 
         const messageRepository = getCustomRepository(MessageRepository);
 
-        const message = await messageRepository.findOne({id});
+        const message = await messageRepository.findOne({ id });
 
-        if(!message){
+        if (!message) {
             return res.status(400).json({
                 Message: "Nada encontrado!"
             })
         }
 
-        await messageRepository.delete({id});
+        await messageRepository.delete({ id });
 
         return res.status(200).json({
             Message: "Sucesso!"
         });
 
+    }
+
+    async show(req: Request, res: Response) {
+        const messageRepository = getCustomRepository(MessageRepository);
+
+        const all = await messageRepository.find();
+
+        if (!all) {
+            return res.status(400).json({
+                Message: "Nada encontrado!"
+            })
+        }
+
+        return res.status(200).json(all);
     }
 
 

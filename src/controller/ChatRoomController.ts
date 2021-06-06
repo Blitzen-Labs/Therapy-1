@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
+import { ChatRoom } from '../models/chatRoom';
 import { ChatRoomRepository } from '../repositories/ChatRoomRepository';
+import { ProRepository } from '../repositories/ProRepository';
+import { UsersRepository } from '../repositories/UsersRepository';
 import { ProController } from './ProController';
 import { UserController } from './userController';
 
@@ -68,6 +71,60 @@ class ChatRoomController {
 
     }
 
+    async update(req: Request, res: Response) {
+        //recebe o id do profissional a ser editado
+        const { id } = req.body;
+
+        const chatRoomRepository = getCustomRepository(ChatRoomRepository);
+
+
+        //usa o id para localiza-lo no bd
+        let chatRoom = await chatRoomRepository.findOne({
+            id
+        });
+
+        if (!chatRoom) {
+            return res.status(400).json({
+                Message: "Chat não encontrado"
+            });
+        }
+
+        const { proId = chatRoom.proId, userId = chatRoom.userId } = req.body;
+
+        const chatUserRepository = getCustomRepository(UsersRepository);
+
+        const chatProRepository = getCustomRepository(ProRepository);
+
+        const user = await chatUserRepository.findOne({ id: userId });
+
+        if (!user) {
+            return res.status(400).json({
+                Message: "Usuário não encontrado"
+            });
+        }
+
+
+        const pro = await chatProRepository.findOne({ id: proId });
+
+        if (!pro) {
+            return res.status(400).json({
+                Message: "Profissional não encontrado"
+            });
+        }
+
+
+        const updatedChat = {
+            proId,
+            userId
+        }
+
+        await chatRoomRepository.update(id, updatedChat)
+
+
+        return res.json(updatedChat);
+    }
+
+
     async delete(req: Request, res: Response) {
         const { id } = req.params;
 
@@ -121,6 +178,21 @@ class ChatRoomController {
         const chat = await chatRoomRepository.findOne(id);
 
         return chat;
+    }
+
+    async show(req: Request, res: Response) {
+
+        const chatRoomRepository = getCustomRepository(ChatRoomRepository);
+
+        const all = await chatRoomRepository.find();
+
+        if (!all) {
+            return res.status(400).json({
+                Message: "Nada encontrado!"
+            })
+        }
+
+        return res.status(200).json(all)
     }
 
 }
