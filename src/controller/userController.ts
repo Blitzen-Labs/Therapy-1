@@ -2,6 +2,7 @@ import { Request, response, Response } from 'express';
 import { createQueryBuilder, getCustomRepository, getRepository } from 'typeorm';
 import { User } from '../models/User';
 import { UsersRepository } from '../repositories/UsersRepository';
+import { md5 } from 'md5';
 
 class UserController {
 
@@ -9,6 +10,8 @@ class UserController {
 
     //Criar
     async create(req: Request, res: Response) {
+        const md5 = require('md5');
+
         const { name, cpf, email, password, birthDate, city, state } = req.body;
 
         if (!name || !cpf || !email || !password || !birthDate || !city || !state) {
@@ -31,7 +34,7 @@ class UserController {
         }
 
         const user = usersRepository.create({
-            name, cpf, email, password, birthDate, city, state
+            name, cpf, email, password: md5(password), birthDate, city, state
         });
 
         await usersRepository.save(user);
@@ -63,6 +66,8 @@ class UserController {
 
     //Procurar
     async search(req: Request, res: Response) {
+        const md5 = require('md5');
+
         const { email, password } = req.body;
 
         if (!email) {
@@ -78,7 +83,7 @@ class UserController {
         const usersRepository = getCustomRepository(UsersRepository);
 
         const user = await usersRepository.findOne({
-            email, password
+            email, password: md5(password)
         });
 
         if (!user) {
@@ -91,6 +96,7 @@ class UserController {
     //Atualizar
     async update(req: Request, res: Response) {
         //recebe todos os dados do  usuario a ser editado
+        const md5 = require('md5');
 
         const { id } = req.body;
 
@@ -113,14 +119,12 @@ class UserController {
 
         const updatedUser = {
             name: name, cpf: cpf, email: email,
-            password: password, birthDate: birthDate
+            password: md5(password), birthDate: birthDate
         }
 
 
         await usersRepository.update(id, updatedUser)
 
-
-        res.setHeader("Access-Control-Allow-Origin", "*");
         return res.json(updatedUser);
     }
 

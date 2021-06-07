@@ -4,25 +4,25 @@ import { Professional } from "./Professional";
 import { User } from "./User";
 
 
-@Entity("survey")
+@Entity("surveys")
 class Survey {
 
-    @PrimaryColumn()
-    readonly id: string;
+  @PrimaryColumn()
+  readonly id: string;
 
-    @Column()
-    avaliation: number;
+  @Column()
+  avaliation: number;
 
-    @Column()
-    userId: string;
-  
-    @Column()
-    proId: string;
+  @Column()
+  userId: string;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @Column()
+  proId: string;
 
-    
+  @CreateDateColumn()
+  createdAt: Date;
+
+
   @ManyToOne(() => User)
   @JoinColumn({ name: "userID" })
   user: User;
@@ -33,12 +33,12 @@ class Survey {
 
   constructor() {
     if (!this.id) {
-        this.id = uuid();
+      this.id = uuid();
     }
-}
+  }
 
 
 
 }
 
-export {Survey}
+export { Survey }
