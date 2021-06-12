@@ -36,7 +36,7 @@ router.delete('/chat/:id', chatRoomController.delete); //Deletar
 //router.post('/updateChat', proController.update); //Atualizar
 router.get('/chatReadPeople', chatRoomController.readFromPeople); //Ler com base os dois usuários cadastrados no mesmo
 router.get('/chat/:id', chatRoomController.read); // Pesquisar (logar)
-router.get('/showChat', proController.show); //exibir todos
+router.get('/showChat', chatRoomController.show); //exibir todos
 
 
 

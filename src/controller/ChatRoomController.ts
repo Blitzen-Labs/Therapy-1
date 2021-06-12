@@ -124,6 +124,14 @@ class ChatRoomController {
         return chat;
     }
 
+    async show(req: Request, res: Response) {
+        const chatRoomRepository = getCustomRepository(ChatRoomRepository);
+        
+        const chat = await chatRoomRepository.find();
+
+        return chat;
+    }
+
 }
 
 export { ChatRoomController }

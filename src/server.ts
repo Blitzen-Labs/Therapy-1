@@ -30,8 +30,10 @@ io.on("connection", function (socket) {
 
 
 
-    socket.on("joinRoom", ({ nickname1, chatRoom }) => {
-        socket.join(chatRoom);
+    socket.on("joinRoom", ({ name, room }, callback) => {
+        console.log(name, room);
+        socket.join(room);
+        callback()
     })
 
     socket.on("msg", ({ nickname1, msg, chatRoom }) => {
@@ -50,7 +52,7 @@ io.on("connection", function (socket) {
     });
 
     socket.on("disconnect", () => {
-
+        console.log('Usuário desconectado')
     })
 });
 
