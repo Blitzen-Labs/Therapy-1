@@ -84,6 +84,22 @@ class MessageController {
         return res.status(200).json(message);
     }
 
+    async readByChat(req: Request, res: Response) {
+        const { chatRoomId } = req.params;
+
+        const messageRepository = getCustomRepository(MessageRepository);
+
+        const message = await messageRepository.find({ chatRoomId });
+
+        if (message.length == 0) {
+            return res.status(400).json({
+                Message: "Nada encontrado!"
+            })
+        }
+
+        return res.status(200).json(message);
+    }
+
     async update(req: Request, res: Response) {
         //recebe todos os dados do  usuario a ser editado
 
@@ -121,7 +137,8 @@ class MessageController {
 
         const messageRepository = getCustomRepository(MessageRepository);
 
-        const message = await messageRepository.findOne({ id });
+        const message = await messageRepository.findOne(id);
+
 
         if (!message) {
             return res.status(400).json({

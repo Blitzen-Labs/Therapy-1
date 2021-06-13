@@ -4,6 +4,7 @@ import { ProController } from './controller/ProController';
 import { ChatRoomController } from './controller/ChatRoomController';
 import { MessageController } from './controller/MessageController';
 import { SurveysController } from './controller/surveysController';
+import { SolicitationController } from './controller/SolicitationController';
 
 //Criação das rotas e dos controladores do usuário e profissional
 const router = Router();
@@ -12,6 +13,7 @@ const proController = new ProController();
 const chatRoomController = new ChatRoomController();
 const messageController = new MessageController();
 const surveyController = new SurveysController();
+const solicitationController = new SolicitationController();
 
 router.post('/user', userController.create); //Criar
 router.delete('/user/:id', userController.delete); //Deletar
@@ -51,6 +53,7 @@ router.post('/message', messageController.create); //Criar
 router.delete('/message/:id', messageController.delete); //Deletar
 router.post('/updateMsg', messageController.update); //Atualizar
 router.get('/message/:id', messageController.read); // Pesquisar
+router.get('/messageByChat/:chatRoomId', messageController.readByChat); // Pesquisar as mensagens de um chat especifico
 router.get('/showMsg', messageController.show); //exibir todos
 
 
@@ -59,8 +62,17 @@ router.get('/showMsg', messageController.show); //exibir todos
 router.post('/survey', surveyController.create); //Criar
 router.delete('/survey/:id', surveyController.delete); //Deletar
 router.post('/updateSurvey', surveyController.update); //Atualizar
-router.get('/survey/:id', surveyController.read); // Pesquisar (logar)
+router.get('/survey/:id', surveyController.read); // Pesquisar
 router.get('/showSurvey', surveyController.show); //exibir todos
+
+
+
+//Solicitation
+router.post('/solicitation', solicitationController.create); //Criar
+router.delete('/solicitation/:id', solicitationController.delete); //Deletar
+router.post('/updatesolicitation', solicitationController.update); //Atualizar
+router.get('/solicitation/:id', solicitationController.read); // Pesquisar
+router.get('/showsolicitation', solicitationController.show); //exibir todos
 
 
 
