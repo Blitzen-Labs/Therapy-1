@@ -18,7 +18,7 @@ const solicitationController = new SolicitationController();
 router.post('/user', userController.create); //Criar
 router.delete('/user/:id', userController.delete); //Deletar
 router.post('/updateuser', userController.update); //Atualizar
-router.get('/user', userController.search); // Pesquisar (logar)
+router.get('/login', userController.search); // Pesquisar (logar)
 router.get('/show', userController.show); //exibir todos
 
 
